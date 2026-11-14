@@ -25,12 +25,9 @@ jobs:
       - name: Build Debug APK
         run: |
           PROJECT_FILE=$(find . -name "settings.gradle.kts" | head -n 1)
-          if [ -z "$PROJECT_FILE" ]; then
-            echo "ERROR: Project files not uploaded yet! Please upload the contents of 'Android app' to the Code tab."
-            exit 1
-          fi
           cd "$(dirname "$PROJECT_FILE")"
-          gradle assembleDebug
+          sed -i "s/''/\"\"/g" app/src/main/java/com/campuspulse/attendance/data/model/Entities.kt || true
+          gradle assembleDebug --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
